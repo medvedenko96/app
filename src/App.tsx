@@ -1,9 +1,11 @@
 import React from 'react';
+import WebApp from '@twa-dev/sdk'
 // @ts-ignore
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  WebApp.showAlert('Hey there!');
   return (
     <div className="App">
       <header className="App-header">
