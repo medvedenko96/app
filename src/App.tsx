@@ -1,44 +1,35 @@
 import React, {useEffect} from 'react';
 import WebApp from '@twa-dev/sdk'
-import { MainButton } from '@twa-dev/sdk/react';
-// @ts-ignore
-import logo from './logo.svg';
+import useTelegramDataValidation from "./Hooks/useTelegramDataValidation";
+
 import './App.css';
+
+
+const BOT_TOKEN = '7401426416:AAHdLBTASLAp9y-kV7JGFK6a_y8F8PpAMC0';
 
 function App() {
   WebApp.ready();
 
   useEffect(() => {
-    console.log(WebApp.initDataUnsafe);
     console.log(WebApp.initData);
   }, []);
 
+ const [ isValid, isRecent, userData ] = useTelegramDataValidation(WebApp.initData, BOT_TOKEN)
+
   return (
       <div className="App">
-          <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo"/>
-          </header>
           <div>
-              {
-                  WebApp.initData && (
-                      <div>
-                          <h3>Init Data</h3>
-                          <pre>{JSON.stringify(WebApp.initData, null, 2)}</pre>
-                      </div>
-                  )
-              }
+              {isValid ? (
+                  <div>
+                      <p>Data is valid!</p>
+                      {isRecent ? <p>Data is recent!</p> : <p>Data is outdated.</p>}
+                      <p>User Data:</p>
+                      <pre>{JSON.stringify(userData, null, 2)}</pre>
+                  </div>
+              ) : (
+                  <p>Data validation failed.</p>
+              )}
           </div>
-          <div>
-              {
-                  WebApp.initDataUnsafe && (
-                      <div>
-                          <h3>Init Data</h3>
-                          <pre>{JSON.stringify(WebApp.initDataUnsafe, null, 2)}</pre>
-                      </div>
-                  )
-              }
-          </div>
-          <MainButton text="Submit" onClick={() => alert('submitted')}/>
       </div>
   );
 }
