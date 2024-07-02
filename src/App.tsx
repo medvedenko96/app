@@ -1,18 +1,12 @@
 import React, {useEffect} from 'react';
 import WebApp from '@twa-dev/sdk'
 import useTelegramDataValidation from "./Hooks/useTelegramDataValidation";
-
 import './App.css';
-
 
 const BOT_TOKEN = '7401426416:AAHdLBTASLAp9y-kV7JGFK6a_y8F8PpAMC0';
 
 function App() {
   WebApp.ready();
-
-  useEffect(() => {
-    console.log(WebApp.initData);
-  }, []);
 
  const [ isValid, isRecent, userData ] = useTelegramDataValidation(WebApp.initData, BOT_TOKEN)
 

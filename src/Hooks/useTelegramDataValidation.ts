@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import crypto from 'crypto';
+import crypto from 'crypto-js';
 
 interface UserData {
     id: number;
@@ -18,7 +18,7 @@ const useTelegramDataValidation = (queryString: string, botToken: string): [bool
 
     useEffect(() => {
         const hmacSha256 = (key: string, msg: string): string => {
-            return crypto.createHmac('sha256', key).update(msg).digest('hex');
+            return crypto.HmacSHA256(msg, key).toString(crypto.enc.Hex);
         };
 
         const validateData = () => {
@@ -36,9 +36,7 @@ const useTelegramDataValidation = (queryString: string, botToken: string): [bool
                 .join('\n');
 
             // Compute secret_key
-            const secretKey = crypto.createHmac('sha256', "WebAppData")
-                .update(botToken)
-                .digest('hex');
+            const secretKey = crypto.HmacSHA256("WebAppData", botToken).toString(crypto.enc.Hex);
 
             // Compute HMAC-SHA-256 signature of data_check_string using secret_key
             const computedHash = hmacSha256(secretKey, dataCheckString);
@@ -69,7 +67,7 @@ const useTelegramDataValidation = (queryString: string, botToken: string): [bool
         validateData();
     }, [queryString, botToken]);
 
-    return [ isValid, isRecent, userData ];
+    return [isValid, isRecent, userData];
 };
 
 export default useTelegramDataValidation;
